@@ -27,7 +27,7 @@ void init(TValue* arr, int* size)
 {
     random_device rd;
     mt19937 gen(rd());
-    uniform_int_distribution<int> dist(0, 99);
+    uniform_int_distribution<int> dist(-99, 99);
 
 
     for (int i = 0; i < *size; i++)
@@ -60,7 +60,6 @@ void sorting(TValue* arr, int left, int right)
     int j = right;
 
     int key = arr[(left + right) / 2];
-
     do
     {
         while (arr[i] < key) { i++; }
@@ -82,19 +81,61 @@ void sorting(TValue* arr, int left, int right)
     if (i < right) { sorting<TValue>(arr, i, right); }
 }
 
-int mean()
+template<typename TValue>
+int _mean(TValue* arr, int* size)
 {
+    int result{};
 
+    for (int i = 0; i < *size; i++)
+    {
+        result += arr[i];
+    }
+
+    return result / *size;
+}
+
+template<typename TValue>
+void reverse(TValue* arr, int start, int end)
+{
+    TValue* new_arr = new TValue[end - start]{};
+    for (int i = 0; i < end - start; i++)
+    {
+        new_arr[i] = arr[end - i - 1];
+    }
+
+    for (int i = 0; i < end - start; i++)
+    {
+        arr[start + i] = new_arr[i];
+    }
+
+    delete_value(new_arr, true);
 }
 
 int main()
 {
-    int* size = new int{ 10 };
+    int* size = new int{ 15 };
     int* arr = new int[*size];
     init<int>(arr, size);
     print<int, const char>(arr, size, "Array: ");
 
-    sorting<int>(arr, 0, *size - 1);
+    int mean = _mean<int>(arr, size);
+    cout << endl << endl << "Arithmetic mean: " << mean << endl;
+
+    if (mean > 0)
+    {
+        cout << "2/3";
+        sorting<int>(arr, 0, (*size * (2.0 / 3.0)) - 1);
+        reverse<int>(arr, (*size * (2.0 / 3.0)), *size);
+    }
+    else
+    {
+        cout << "1/3";
+        sorting<int>(arr, 0, (*size * (1.0/3.0)) - 1);
+        reverse<int>(arr, (*size * (1.0 / 3.0)), *size);
+    }
+
+    cout << " of the array will be sorted. The remaining part is reversed" << endl << endl;
+    
     print<int, const char>(arr, size, "Result: ");
 
     delete_value<int>(arr, true);
