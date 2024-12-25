@@ -54,7 +54,7 @@ void print(TValueL* arr, int* size, TValueR* message)
 }
 
 template<typename TValue>
-void sorting(TValue* arr, int* size, int left, int right)
+void sorting(TValue* arr, int left, int right)
 {
     int i = left;
     int j = right;
@@ -78,8 +78,8 @@ void sorting(TValue* arr, int* size, int left, int right)
         }
     } while (i <= j);
 
-    if (left < j) { sorting<TValue>(arr, size, left, j); }
-    if (i < right) { sorting<TValue>(arr, size, i, right); }
+    if (left < j) { sorting<TValue>(arr, left, j); }
+    if (i < right) { sorting<TValue>(arr, i, right); }
 }
 
 int main()
@@ -89,7 +89,7 @@ int main()
     init<int>(arr, size);
     print<int, const char>(arr, size, "Array: ");
 
-    sorting<int>(arr, size, 0, *size - 1);
+    sorting<int>(arr, 0, *size - 1);
     print<int, const char>(arr, size, "Result: ");
 
     delete_value<int>(arr, true);
